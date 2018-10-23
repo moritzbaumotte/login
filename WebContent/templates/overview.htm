@@ -1,0 +1,19 @@
+<div id="overview">
+	<div ng-click="startNewTicket()" ng-if="newTicket == false" class="btn btn-block btn-danger">Create new Ticket <span class="glyphicon glyphicon-folder-open"></span></div>
+	<div id="newTicket" ng-if="newTicket == true">
+		<div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-font"></i></span>
+			<input ng-model="ticket.title" type="text" class="form-control" placeholder="Title" />
+		</div>
+		<div class="input-group">
+			<span class="input-group-addon"><i class="glyphicon glyphicon-list-alt"></i></span>
+			<textarea rows="8" ng-model="ticket.description" class="form-control" placeholder="Description" />
+		</div>
+		<div class="col-xs-6" style="padding: 0px">
+			<div class="btn btn-block btn-primary btn-default" ng-click="submitNewTicket()">Submit <span class="glyphicon glyphicon-ok"></span></div>
+		</div>
+		<div class="col-xs-6" style="padding: 0px">
+			<div class="btn btn-block btn-primary btn-warning" ng-click="startNewTicket()">Cancel <span class="glyphicon glyphicon-remove"></span></div>
+		</div>
+	</div>
+<div>
