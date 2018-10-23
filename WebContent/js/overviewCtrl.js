@@ -17,7 +17,7 @@ app.controller('overviewCtrl', function($scope, $http){
 			alert("Please fill out both title and description. Thank you.");
 		}else{
 			$.ajax({
-				url: "http://localhost:8080/ticketing/rest/tickets/" + email + "/ticket",
+				url: "localhost:8080/login_ticketing/rest/authService/ticketing_tickets/" + email + "/ticket",
 				type: "POST",
 				contentType:"application/json",
 				data: JSON.stringify($scope.ticket),
