@@ -3,8 +3,8 @@ app.controller('overviewCtrl', function($scope, $http){
 	$scope.ticket = {
 		ticketId: -1,
 		userEmail: email,
-		title: "test gfgfhgf",
-		description: "sdf",
+		title: "",
+		description: "",
 		active: 1
 	};
 	

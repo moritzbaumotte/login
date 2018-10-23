@@ -1,4 +1,4 @@
-var email;
+var email = "";
 
 var app = angular.module("ticketing", ["ngRoute"]);
 app.config(function($routeProvider) {
@@ -9,6 +9,16 @@ app.config(function($routeProvider) {
     })
     .when("/overview", {
         templateUrl : "templates/overview.htm",
+        resolve: {
+        	check: function($window){
+        		if(email != ""){
+        			//all good
+        		}else{
+        			alert("Please login first.");
+        			$window.location.href = "/login_ticketing/#!/";
+        		}
+        	}
+        },
 		controller: "overviewCtrl"
     });
 });
