@@ -1,6 +1,8 @@
 package com.baumotte.login.endpoints;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,9 +16,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.baumotte.login.entities.AuthList;
 import com.baumotte.login.entities.Service;
+import com.baumotte.login.entities.TokenBuilder;
 import com.baumotte.login.entities.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.TokenBuffer;
 
 @Path ("/authService")
 public class LoginEP {
@@ -40,26 +45,33 @@ public class LoginEP {
 			try {
 				User user = objMapper.readValue(obj, User.class);
 				//check in database, for now assume true
+				TokenBuilder tk = new TokenBuilder();
+				String token = tk.generateToken(user);
+				AuthList.add(user, token);
 				
-				
+				r = Response.status(Response.Status.OK).entity(token).build();
 			} catch (IOException e) {
 				r = Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 				e.printStackTrace();
 			}
 		}else {
-			if(path.length < 2) {
+			if(path.length < 3) {
 				r = Response.status(Response.Status.BAD_REQUEST).build();
 			}else {
-				String uri = getURL(path[1]);
-				for(int i = 2; i < path.length; i++)
-					uri += "/" + path[i];
-				
-				String response = client.target(uri)
-						.request()
-						.post(Entity.entity(obj, MediaType.APPLICATION_JSON))
-						.readEntity(String.class);
-				
-				r = Response.status(Response.Status.OK).entity(response).build();
+				if(AuthList.isAuthenticated(path[1])) {
+					String uri = getURL(path[2]);
+					for(int i = 2; i < path.length; i++)
+						uri += "/" + path[i];
+					
+					String response = client.target(uri)
+							.request()
+							.post(Entity.entity(obj, MediaType.APPLICATION_JSON))
+							.readEntity(String.class);
+					
+					r = Response.status(Response.Status.OK).entity(response).build();
+				}else {
+					r = Response.status(Response.Status.UNAUTHORIZED).build();
+				}
 			}
 		}
 		
