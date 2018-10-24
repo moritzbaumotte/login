@@ -1,4 +1,4 @@
-package com.baumotte.login_ticketing.entities;
+package com.baumotte.login.entities;
 
 public class Service {
 	
